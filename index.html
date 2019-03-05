@@ -201,7 +201,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;plaintext&quot;,&quot;python&quot;]">
+  <body class="index" data-languages="[&quot;plaintext&quot;,&quot;python&quot;,&quot;shell&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -213,6 +213,7 @@
         <div class="lang-selector">
               <a href="#" data-language-name="plaintext">plaintext</a>
               <a href="#" data-language-name="python">python</a>
+              <a href="#" data-language-name="shell">shell</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -223,13 +224,13 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
-            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
-          </li>
-          <li>
-            <a href="#programs" class="toc-h1 toc-link" data-title="Programs">Programs</a>
+            <a href="#pumps" class="toc-h1 toc-link" data-title="Pumps">Pumps</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#rpm" class="toc-h2 toc-link" data-title="RPM">RPM</a>
+                    <a href="#authentication" class="toc-h2 toc-link" data-title="Authentication">Authentication</a>
+                  </li>
+                  <li>
+                    <a href="#programs" class="toc-h2 toc-link" data-title="Programs">Programs</a>
                   </li>
               </ul>
           </li>
@@ -262,31 +263,47 @@
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
 <p>This is a best-effort reverse-engineering of the Pentair pool equipment API.  The fundamental RS-485 protocol is spoken by the Intelli* series of pumps, chlorinators, controllers, etc.  This is not an official API and is not provided by, condoned by, or affiliated with Pentair in any way.  This documentation, <a href="https://github.com/cilynx/pypentair">pypentair</a>, and <a href="https://github.com/cilynx/pypentair-rest">pypentair-rest</a> are open-source and provided free of charge and without warranty.  Anything you do with your equipment is at your own risk.  If use of this API or any of its implementations breaks your equipment or injures anyone in any way, the responsibility is yours.</p>
-<h1 id='authentication'>Authentication</h1>
+<h1 id='pumps'>Pumps</h1><h2 id='authentication'>Authentication</h2>
 <aside class="warning">
 TBD: Pumps have a PIN that can be accessed over RS-485 that we could authenticate against, but I'm not sure if it's worth it.
 </aside>
-<h1 id='programs'>Programs</h1>
+<h2 id='programs'>Programs</h2>
 <p>External Control Programs 1-4 allow you to define RPMs that will run when an external controller such as the IntelliComm power center or <a href="https://github.com/cilynx/pypentair">pypentair</a> set the running program.</p>
-<h2 id='rpm'>RPM</h2>
-<p>A 2-byte integer that defines the desired RPM for a program to run at.</p>
+<h3 id='rpm'>RPM</h3>
+<p>A 2-byte integer defining the desired RPM for a program to run at.</p>
 
 <aside class="notice">
 If you attempt to set a Program's RPM to a value higher than `max_rpm`, the Program's RPM will be set to `max_rpm`.  If you attempt to set a Program's RPM to a value lower than `min_rpm`, the Program's RPM will be set to `min_rpm`.
 </aside>
-<pre class="highlight plaintext tab-plaintext"><code># Set
+<pre class="highlight plaintext tab-plaintext"><code># Set Pump 1, Program 1 to 750 RPM
 
 Request     [255, 0, 255, 165, 0, 96, 33, 1, 4, 3, 39, 2, 238, 2, 69]
 Response    [255, 0, 255, 165, 0, 33, 96, 1, 2, 2, 238, 2, 25]
 
-# Get
+# Get RPM from Pump 1, Program 1
 
 # TODO
 </code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">pypentair</span> <span class="kn">import</span> <span class="n">Pump</span>
 
-<span class="n">Pump</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">program</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rpm</span> <span class="o">=</span> <span class="mi">750</span>
+<span class="n">oldRPM</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">program</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rpm</span>
 
-<span class="n">myRPM</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">program</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">Pump</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">program</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rpm</span> <span class="o">=</span> <span class="mi">1500</span>
+</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># Get</span>
+curl http://pypentair-rest/pump/1/program/1
+
+<span class="c"># Returns:</span>
+<span class="c"># {</span>
+<span class="c">#    "program": {</span>
+<span class="c">#        "rpm": 1105,</span>
+<span class="c">#        "index": 1</span>
+<span class="c">#    }</span>
+<span class="c"># }</span>
+
+<span class="c"># Set</span>
+curl http://pypentair-rest/pump/1/program/1 -d <span class="s2">"rpm=1500"</span> -X PUT
+
+<span class="c"># Not yet implemented in pypentair-rest</span>
+
 </code></pre><h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
 
 <span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
@@ -494,6 +511,7 @@ This error section is stored in a separate file in <code>includes/_errors.md</co
           <div class="lang-selector">
                 <a href="#" data-language-name="plaintext">plaintext</a>
                 <a href="#" data-language-name="python">python</a>
+                <a href="#" data-language-name="shell">shell</a>
           </div>
       </div>
     </div>
