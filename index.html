@@ -255,7 +255,7 @@ Pumps have a PIN that can be accessed over RS-485 that we could authenticate aga
 </aside>
 <h2 id='programs'>Programs</h2>
 <p>External Control Programs 1-4 allow you to define RPMs that will run when an external controller such as the IntelliComm power center or <a href="https://github.com/cilynx/pypentair">pypentair</a> set the running program.</p>
-<h3 id='rpm'>RPM</h3><pre class="highlight plaintext tab-plaintext"><code># Set Pump 1, Program 1 to 750 RPM
+<pre class="highlight plaintext tab-plaintext"><code># Set Pump 1, Program 1 to 750 RPM
 
 Request     [255, 0, 255, 165, 0, 96, 33, 1, 4, 3, 39, 2, 238, 2, 69]
 Response    [255, 0, 255, 165, 0, 33, 96, 1, 2, 2, 238, 2, 25]
@@ -271,7 +271,8 @@ Response    [255, 0, 255, 165, 0, 33, 96, 1, 2, 2, 238, 2, 25]
 </code></pre><pre class="highlight shell tab-shell"><code><span class="c"># Get</span>
 curl http://pypentair-rest/pump/1/program/1
 
-<span class="c"># Returns:</span>
+<span class="c"># Response</span>
+<span class="c">#</span>
 <span class="c"># {</span>
 <span class="c">#    "program": {</span>
 <span class="c">#        "rpm": 1105,</span>
@@ -284,7 +285,7 @@ curl http://pypentair-rest/pump/1/program/1 -d <span class="s2">"rpm=1500"</span
 
 <span class="c"># Not yet implemented in pypentair-rest</span>
 
-</code></pre>
+</code></pre><h3 id='rpm'>RPM</h3>
 <p>A 2-byte integer defining the desired RPM for a program to run at.</p>
 
 <aside class="notice">
