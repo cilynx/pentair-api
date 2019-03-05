@@ -323,13 +323,9 @@ curl http://pypentair-rest/pump/1/ramp -d <span class="s2">"rpm=200"</span> -X P
 </code></pre>
 <p>From the <a href="https://www.pentair.com/content/dam/extranet/product-related/product-manuals/commercial/pumps/intelliflo-vs---svrs/IntelliFloSVRSOM.pdf">IntelliFlo VS+SVRS Installation and User&#39;s Guide</a>:</p>
 
-<aside class="success">
-The Ramp Speed can be set from 5 RPM to 400 RPM.  The default setting is 200 RPM.  This means when the pump changes speeds it will ramp at 200 RPM increments.  For example, when the pump changes speeds from 1500 RPM to 2350 RPM it will ramp to 1700 RPM wait approximately 5 seconds then move to 1900 RPM, wait 5 seconds and then move to 2300 RPM wait five (5) seconds then move to 2350 RPM.  This adjustment is made available to the user to help minimize the occurrence of a false tripping SVRS alarm when switching speeds.
-</aside>
+<p>*The Ramp Speed can be set from 5 RPM to 400 RPM.  The default setting is 200 RPM.  This means when the pump changes speeds it will ramp at 200 RPM increments.  For example, when the pump changes speeds from 1500 RPM to 2350 RPM it will ramp to 1700 RPM wait approximately 5 seconds then move to 1900 RPM, wait 5 seconds and then move to 2300 RPM wait five (5) seconds then move to 2350 RPM.  This adjustment is made available to the user to help minimize the occurrence of a false tripping SVRS alarm when switching speeds.</p>
 
-<aside class="notice">
-Note: Using the five (5) RPM setting would cause the pump to take a long time to switch between speeds.  Using the 400 RPM setting may cause false tripping of the SVRS function when switching speeds.
-</aside>
+<p>Note: Using the five (5) RPM setting would cause the pump to take a long time to switch between speeds.  Using the 400 RPM setting may cause false tripping of the SVRS function when switching speeds.*</p>
 <h1 id='errors'>Errors</h1>
 <aside class="notice">
 This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
